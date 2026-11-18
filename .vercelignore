@@ -1,0 +1,5 @@
+.env
+__pycache__/
+runs/archive/
+BUILD_PROMPT.md
+domains.txt

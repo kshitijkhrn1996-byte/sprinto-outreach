@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Outreach Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f5f8; --panel:#ffffff; --panel-2:#f8f9fb; --ink:#111827; --ink-2:#374151; --muted:#6b7280; --line:#e5e7eb;
+  --accent:#4f46e5; --accent-soft:#eef2ff;
+  --p1:#4f46e5; --p2:#7c3aed; --s1:#0d9488; --s2:#0ea5e9;
+  --ok:#047857; --ok-soft:#ecfdf5; --bad:#b91c1c; --bad-soft:#fef2f2; --warn:#b45309; --warn-soft:#fffbeb;
+  --shadow:0 1px 2px rgba(16,24,40,.04),0 1px 3px rgba(16,24,40,.06);
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0b0d12; --panel:#141821; --panel-2:#1a1f2a; --ink:#f3f4f6; --ink-2:#d1d5db; --muted:#9ca3af; --line:#262c38;
+  --accent:#818cf8; --accent-soft:#1e1b4b;
+  --p1:#818cf8; --p2:#a78bfa; --s1:#2dd4bf; --s2:#38bdf8;
+  --ok:#34d399; --ok-soft:#052e1f; --bad:#f87171; --bad-soft:#2a1010; --warn:#fbbf24; --warn-soft:#2a1d05;
+  --shadow:none;
+}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+code{font:12px ui-monospace,Consolas,monospace;word-break:break-all}
+a{color:var(--accent);text-decoration:none}
+.muted{color:var(--muted)}
+
+/* top bar + nav */
+.top{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line)}
+.top-inner{max-width:1280px;margin:0 auto;padding:12px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--p2));display:grid;place-items:center;color:#fff;font-weight:800}
+.brand h1{font-size:17px;margin:0}
+.brand div{font-size:12px;color:var(--muted)}
+nav{display:flex;gap:4px;margin-left:12px}
+nav a{padding:6px 12px;border-radius:8px;font-weight:600;font-size:13px;color:var(--ink-2)}
+nav a:hover{background:var(--panel-2)}
+.spacer{flex:1}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:12px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-2)}
+.dot{width:7px;height:7px;border-radius:50%}
+
+.wrap{max-width:1280px;margin:0 auto;padding:8px 28px 80px}
+@media (max-width:900px){.wrap,.top-inner{padding-left:16px;padding-right:16px} nav{margin-left:0}}
+
+section.block{margin-top:34px}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.sec-head .no{font-size:12px;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:3px 9px;border-radius:999px}
+.sec-head h2{margin:0;font-size:21px;letter-spacing:-.01em}
+.sec-head p{margin:0;color:var(--muted);font-size:13.5px;flex-basis:100%}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow);min-width:0}
+.eyebrow{font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700;margin:0 0 10px}
+
+/* 1. how it works */
+.flow{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}
+@media (max-width:1100px){.flow{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:640px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.fstep{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;position:relative}
+.fstep .n{width:24px;height:24px;border-radius:7px;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700}
+.fstep h4{margin:8px 0 2px;font-size:13.5px}
+.fstep p{margin:0;font-size:12px;color:var(--muted)}
+.fstep .tool{display:inline-block;margin-top:8px;font-size:11px;padding:2px 7px;border-radius:6px;background:var(--panel-2);border:1px solid var(--line);color:var(--ink-2)}
+.fittest{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+@media (max-width:1000px){.fittest{grid-template-columns:minmax(0,1fr)}}
+.ft h3{margin:0 0 4px;font-size:15px} .ft .lead{font-size:12.5px;color:var(--muted);margin-bottom:10px}
+.ft .big{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px}
+.qlist{margin:0;padding:0;list-style:none;font-size:13px}
+.qlist li{padding:6px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}
+.qlist li:last-child{border:0} .qlist li > span:last-child{white-space:nowrap}
+.sw{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:7px;vertical-align:middle;flex:none}
+.kind{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:1px 6px;border-radius:5px}
+.kind.now{background:var(--accent-soft);color:var(--accent)} .kind.sup{background:var(--panel-2);color:var(--muted);border:1px solid var(--line)}
+.callout{background:var(--accent-soft);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--ink-2)}
+.examples{font-size:12.5px;margin-top:10px} .examples div{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed var(--line)}
+
+/* 2. results */
+.runbar{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:14px;align-items:start}
+@media (max-width:800px){.runbar{grid-template-columns:minmax(0,1fr)}}
+textarea{width:100%;min-height:76px;resize:vertical;border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--panel-2);color:var(--ink);font:13px ui-monospace,Consolas,monospace}
+.switch{display:flex;gap:8px;align-items:center;margin:0 0 10px;font-size:13px;color:var(--ink-2)}
+button{border:0;border-radius:10px;padding:10px 16px;font:600 13.5px Inter,system-ui,sans-serif;cursor:pointer;background:var(--accent);color:#fff;width:100%}
+button:hover{filter:brightness(1.07)} button:disabled{opacity:.45;cursor:default;filter:none}
+.prog{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px 16px;margin-top:12px}
+.prog .row{font-size:12.5px} .prog .d{font-weight:600} .prog .s{color:var(--muted);font-size:12px}
+.mini{display:flex;gap:3px;margin-top:4px}
+.mini i{flex:1;height:4px;border-radius:2px;background:var(--line)}
+.mini i.on{background:var(--accent)} .mini i.stop{background:var(--bad)}
+.mini.busy i{animation:pulse 1.4s ease-in-out infinite} .mini.busy i:nth-child(2n){animation-delay:.2s} .mini.busy i:nth-child(3n){animation-delay:.4s}
+@keyframes pulse{50%{background:var(--accent)}}
+
+.funnel{display:flex;align-items:stretch;gap:0;margin:16px 0}
+.fn{flex:1;background:var(--panel);border:1px solid var(--line);padding:14px 16px;min-width:0}
+.fn:first-child{border-radius:14px 0 0 14px} .fn:last-child{border-radius:0 14px 14px 0}
+.fn + .fn{border-left:0}
+.fn .v{font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.fn .l{font-size:12.5px;color:var(--ink-2);font-weight:600}
+.fn .r{font-size:11.5px;color:var(--muted)}
+@media (max-width:800px){.funnel{flex-wrap:wrap;gap:8px}.fn{flex-basis:45%;border-radius:12px!important;border-left:1px solid var(--line)!important}}
+
+table.res{width:100%;border-collapse:collapse}
+table.res th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding:0 10px 10px;border-bottom:1px solid var(--line)}
+table.res td{padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+table.res tr.row{cursor:pointer} table.res tr.row:hover td{background:var(--panel-2)} table.res tr.sel td{background:var(--accent-soft)}
+.dn{font-weight:700} .ol{font-size:12px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+@media (max-width:800px){table.res .hide-sm{display:none} table.res .pill{white-space:normal}}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.neutral{background:var(--accent-soft);color:var(--accent)} .pill.grey{background:var(--panel-2);color:var(--muted);border:1px solid var(--line)}
+.empty{color:var(--muted);text-align:center;padding:36px 12px}
+
+.sbar{position:relative;height:10px;border-radius:5px;background:var(--line);display:flex;min-width:90px}
+.sbar span{height:100%} .sbar span:first-child{border-radius:5px 0 0 5px}
+.sbar .th{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);border-radius:1px}
+.sline{display:flex;align-items:center;gap:10px} .sline .sbar{flex:1} .sline b{font-size:13px;min-width:24px;text-align:right}
+
+/* 3. walkthrough */
+.verdict{display:flex;gap:16px;align-items:flex-start}
+.verdict .icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;font-weight:800;flex:none}
+.verdict.yes .icon{background:var(--ok-soft);color:var(--ok)} .verdict.no .icon{background:var(--bad-soft);color:var(--bad)}
+.verdict h3{margin:0;font-size:20px;letter-spacing:-.01em}
+.verdict .dom{color:var(--muted);font-size:13px}
+.verdict .sentence{margin-top:8px;font-size:15px;line-height:1.6;color:var(--ink-2)}
+.picker{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.picker button{width:auto;padding:6px 12px;font-size:12.5px;background:var(--panel);color:var(--ink-2);border:1px solid var(--line)}
+.picker button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+.story{position:relative;margin-top:18px}
+.step{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;position:relative;padding-bottom:16px}
+.step:before{content:"";position:absolute;left:21px;top:40px;bottom:0;width:2px;background:var(--line)}
+.step:last-child:before{display:none}
+.step .num{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-weight:800;background:var(--accent);color:#fff;z-index:1}
+.step.off .num{background:var(--panel-2);color:var(--muted);border:1px solid var(--line)}
+.step.stop .num{background:var(--bad);color:#fff}
+.step.pend .num{background:var(--panel);color:var(--accent);border:2px dashed var(--accent)}
+.step .card{padding:16px 18px}
+.step .q{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.step .q h4{margin:0;font-size:15px}
+.step .q .tool{font-size:11px;color:var(--muted)}
+.step .a{font-size:14.5px;font-weight:600;margin-top:4px}
+.step.off .card{opacity:.6}
+.step .more{margin-top:12px}
+.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media (max-width:1000px){.g2{grid-template-columns:minmax(0,1fr)}}
+.facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.fact{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+.fact .k{font-size:11.5px;color:var(--muted);font-weight:600} .fact .v{font-size:13px}
+.item{padding:9px 0;border-bottom:1px solid var(--line)} .item:last-child{border:0}
+.item .h{display:flex;justify-content:space-between;gap:10px;font-weight:600;font-size:13.5px}
+.ev{font-size:12.5px;color:var(--muted);margin-top:3px;word-break:break-word}
+.ans{font-weight:700;white-space:nowrap} .ans.y{color:var(--ok)} .ans.n{color:var(--bad)} .ans.u{color:var(--warn)}
+.scale{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:6px}
+.person{display:flex;gap:14px;align-items:center}
+.avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--s1));color:#fff;display:grid;place-items:center;font-weight:700;font-size:17px;flex:none}
+.cand{width:100%;border-collapse:collapse;font-size:12.5px}
+.cand td{padding:6px;border-bottom:1px solid var(--line)} .cand tr.pick td{font-weight:700;color:var(--accent)}
+.pain{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--panel-2)}
+.pain .t{font-weight:700;font-size:14px}
+.pain dl{margin:8px 0 0;font-size:12.5px} .pain dt{color:var(--muted);font-weight:600;margin-top:6px} .pain dd{margin:0}
+.mail{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)}
+.mail .meta{padding:10px 16px;border-bottom:1px solid var(--line);background:var(--panel-2);font-size:12.5px;display:grid;grid-template-columns:70px 1fr;row-gap:3px}
+.mail .meta span:nth-child(odd){color:var(--muted)}
+.mail .subj{padding:14px 16px 0;font-weight:700;font-size:16px}
+.mail .body{padding:10px 16px 18px;white-space:pre-wrap;font-size:14px;line-height:1.65;color:var(--ink-2)}
+details summary{cursor:pointer;color:var(--accent);font-size:12.5px;font-weight:600}
+</style>
+</head>
+<body>
+<div class="top"><div class="top-inner">
+  <div class="mark">S</div>
+  <div class="brand"><h1>Outreach Engine</h1><div>Automated cold outreach for Sprinto</div></div>
+  <nav><a href="#how">1 · How it works</a><a href="#results">2 · Results</a><a href="#walk">3 · Walkthrough</a></nav>
+  <span class="spacer"></span>
+  <span class="chip">Emails go to <b id="toEmail"></b></span>
+  <span class="chip" id="gmailChip"></span>
+</div></div>
+
+<div class="wrap">
+
+  <!-- 1. HOW IT WORKS -->
+  <section class="block" id="how">
+    <div class="sec-head"><span class="no">1</span><h2>How it works</h2>
+      <p>Give it a list of company websites. For each one it runs seven steps on its own, with no one making decisions along the way.</p></div>
+    <div class="flow" id="flow"></div>
+    <div class="fittest" id="fittest"></div>
+  </section>
+
+  <!-- 2. RESULTS -->
+  <section class="block" id="results">
+    <div class="sec-head"><span class="no">2</span><h2>Results</h2>
+      <p>Every company checked so far. Click one to see exactly how the system decided.</p></div>
+
+    <div class="card">
+      <p class="eyebrow">Run on new companies</p>
+      <div class="runbar">
+        <textarea id="domains" placeholder="Paste website domains, one per line, e.g.&#10;gallabox.com&#10;entrar.in"></textarea>
+        <div>
+          <label class="switch"><input type="checkbox" id="autoSend"> Also send the emails</label>
+          <button id="runBtn">Run the 7 steps</button>
+        </div>
+      </div>
+      <div class="prog" id="progress"></div>
+    </div>
+
+    <div class="funnel" id="funnel"></div>
+
+    <div class="card" style="padding:14px 8px 4px">
+      <table class="res">
+        <thead><tr><th>Company</th><th>Fit?</th><th class="hide-sm">Fit score</th><th>What happened</th><th class="hide-sm">Contact</th></tr></thead>
+        <tbody id="list"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 3. WALKTHROUGH -->
+  <section class="block" id="walk">
+    <div class="sec-head"><span class="no">3</span><h2>Walkthrough</h2>
+      <p>One company, step by step: what the system did at each stage and why.</p></div>
+    <div class="picker" id="picker"></div>
+    <div id="detail"></div>
+  </section>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+// ---- Plain-English wording for everything the pipeline produces ----
+const FLOW = [
+  ["Read the website", "Visits the homepage plus its about, security, pricing and careers pages.", "Python scraper"],
+  ["Pull out the facts", "Turns the page text into facts, then runs 5 Google News searches for funding, acquisitions and compliance news.", "Gemini AI + Google News"],
+  ["Decide if they fit", "Applies Sprinto's fit test. If facts are missing, it reads up to 3 more pages first.", "Gemini AI + rules"],
+  ["Find who to email", "Looks up people at the company and picks the one who owns compliance.", "Hunter.io"],
+  ["Work out their problems", "The two compliance headaches this person most likely has right now.", "Gemini AI"],
+  ["Write the email", "A short, personal email that opens with something specific about them.", "Gemini AI"],
+  ["Send it", "Sends through Gmail. For safety, every email goes to my own inbox.", "Gmail"],
+];
+const GATES = {
+  is_b2b_saas:          {q:"Is it a B2B software (SaaS) company?", pass:"Yes", fail:"No", short:"not B2B SaaS"},
+  stage_in_range:       {q:"Is it at the right stage (Series A–C)?", pass:"Yes", fail:"No", unk:"Probably — not confirmed", short:"at the wrong stage"},
+  not_sprinto_customer: {q:"Is it already a Sprinto customer?", pass:"No", fail:"Yes", short:"already a Sprinto customer"},
+  not_mature_programme: {q:"Does it already hold SOC 2 and ISO 27001?", pass:"No", fail:"Yes", short:"already fully certified"},
+};
+const SIGNALS = {
+  enterprise_selling:     {q:"Is it selling to large companies?", why:"Big customers demand security certifications before they buy.", because:"it sells to large companies"},
+  compliance_in_motion:   {q:"Has compliance work already started?", why:"An audit in progress or security hires means they are buying now.", because:"its compliance work has already started"},
+  sensitive_data:         {q:"Does it handle sensitive data?", why:"Personal, financial, health or HR data raises the stakes.", because:"it handles sensitive data"},
+  regulated_or_eu_buyers: {q:"Does it sell to regulated or EU customers?", why:"Finance, healthcare, government and GDPR all require proof.", because:"it sells to regulated or EU customers"},
+};
+const andList = a => a.length < 2 ? a.join("") : a.slice(0,-1).join(", ") + " and " + a[a.length-1];
+const COLORS = ["var(--p1)","var(--p2)","var(--s1)","var(--s2)"];
+let META, RUNS = [], SELECTED = null, MAX = 80;
+
+// Runs made in this browser are kept here too: on the hosted version the server forgets them.
+const LS_KEY = "outreach_runs";
+function localRuns(){ try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; } catch { return []; } }
+function keepLocal(rec){
+  try {
+    const list = localRuns().filter(r => r._file !== rec._file);
+    localStorage.setItem(LS_KEY, JSON.stringify([rec, ...list].slice(0, 50)));
+  } catch {}
+}
+
+async function loadMeta(){
+  META = await (await fetch("/api/meta")).json();
+  MAX = Object.values(META.signals).reduce((a,s)=>a+s.points,0);
+  Object.keys(META.signals).forEach((k,i)=>{ META.signals[k].color = COLORS[i % COLORS.length]; });
+  $("#toEmail").textContent = META.to_email;
+  $("#gmailChip").innerHTML = META.gmail_configured
+    ? `<span class="dot" style="background:var(--ok)"></span>Gmail connected`
+    : `<span class="dot" style="background:var(--warn)"></span>Gmail not connected · drafts only`;
+
+  $("#flow").innerHTML = FLOW.map(([t,d,tool],i)=>`<div class="fstep"><div class="n">${i+1}</div><h4>${t}</h4><p>${d}</p><span class="tool">${tool}</span></div>`).join("");
+
+  const th = META.threshold;
+  const sigRows = Object.entries(META.signals).map(([k,s]) =>
+    `<li><span><span class="sw" style="background:${s.color}"></span>${esc(SIGNALS[k]?.q || k)}</span>
+     <span><span class="kind ${s.kind==="primary"?"now":"sup"}">${s.kind==="primary"?"why now":"supporting"}</span> <b>+${s.points}</b></span></li>`).join("");
+  $("#fittest").innerHTML = `
+    <div class="card ft"><div class="big">Part A · Checks</div><h3>Four yes/no checks</h3>
+      <div class="lead">Fail any one and the company is out, however good it looks otherwise.</div>
+      <ul class="qlist">${Object.values(GATES).map(g=>`<li><span>${g.q}</span><span class="muted">needs "${g.pass}"</span></li>`).join("")}</ul></div>
+    <div class="card ft"><div class="big">Part B · Score</div><h3>Points for buying signals</h3>
+      <div class="lead">Each signal counts only if the AI quotes evidence from their website. The AI reports what it found; the points are fixed and added up by code.</div>
+      <ul class="qlist">${sigRows}</ul></div>
+    <div class="card ft"><div class="big">Part C · Decide</div><h3>Fits if score ≥ ${th}, with at least one "why now" signal</h3>
+      <div class="lead">${th} is the smallest score that needs <b>a reason to buy now</b> plus <b>one more signal</b> backing it up.</div>
+      <div class="examples">
+        <div><span>Only one "why now" signal</span><span>25 → <b style="color:var(--bad)">no</b></span></div>
+        <div><span>Both supporting, no "why now"</span><span>30 → <b style="color:var(--bad)">no</b></span></div>
+        <div><span>One "why now" + one supporting</span><span>40 → <b style="color:var(--ok)">yes</b></span></div>
+      </div>
+      <div class="callout" style="margin-top:12px">Why not just one signal? Almost every SaaS website has an "Enterprise" page, so one signal on its own proves very little.</div></div>`;
+}
+
+// ---- helpers ----
+const reached = r => {
+  const s = [!!r.pages_scraped?.length, !!r.company, !!r.qualification, !!r.poc?.found, !!r.pain_points, !!r.email, r.status === "sent"];
+  let n = 0; while (n < 7 && s[n]) n++; return n;
+};
+const isFit = r => r.qualification?.decision === "Qualified";
+const name = r => r.company?.company_name || r.domain;
+
+function outcome(r){
+  const q = r.qualification;
+  if (r.status === "sent") return `<span class="pill ok">Email sent</span>`;
+  if (r.email) return `<span class="pill neutral">Email written</span>`;
+  if (r.status?.includes("unreachable")) return `<span class="pill grey">Website unreachable</span>`;
+  if (r.status?.includes("no contact")) return `<span class="pill warn">Fits, but no contact found</span>`;
+  if (r.status?.startsWith("error")) return `<span class="pill bad" title="${esc(r.status)}">Error</span>`;
+  if (q?.failed_gates?.length) return `<span class="muted">Out: ${esc(q.failed_gates.map(g=>GATES[g]?.short||g).join(", "))}</span>`;
+  if (q) return `<span class="muted">Out: score ${q.score}, needs ${q.threshold}</span>`;
+  return `<span class="muted">${esc(r.status||"")}</span>`;
+}
+function stackBar(q){
+  const segs = Object.entries(META.signals).map(([k,s]) => {
+    const p = (q.points_breakdown||{})[k] || 0;
+    return p ? `<span style="width:${p/MAX*100}%;background:${s.color}" title="${esc(SIGNALS[k]?.q)} +${p}"></span>` : "";
+  }).join("");
+  return `<div class="sbar">${segs}<i class="th" style="left:${q.threshold/MAX*100}%" title="needs ${q.threshold}"></i></div>`;
+}
+const scoreCell = q => !q || q.score == null ? `<span class="muted">—</span>`
+  : q.failed_gates?.length ? `<span class="muted">failed a check</span>`
+  : `<div class="sline">${stackBar(q)}<b>${q.score}</b></div>`;
+const fitPill = r => !r.qualification ? `<span class="pill grey">—</span>`
+  : isFit(r) ? `<span class="pill ok">✓ Yes</span>` : `<span class="pill bad">✕ No</span>`;
+
+function verdictSentence(r){
+  const q = r.qualification, n = esc(name(r));
+  if (!q) return `${n} could not be assessed: ${esc(r.status)}.`;
+  const found = Object.keys(META.signals).filter(k => (q.points_breakdown||{})[k]).map(k => SIGNALS[k].because);
+  if (q.failed_gates?.length){
+    const g = q.failed_gates[0], ev = (q.gates?.[g]?.evidence || "").split(/(?<=\.)\s/)[0];
+    return `<b>${n} is not a fit</b> because it is <b>${esc(GATES[g]?.short || g)}</b>${q.failed_gates.length>1?` (and ${q.failed_gates.length-1} other check)`:""}. ${ev ? `Evidence: “${esc(ev)}”` : ""}`;
+  }
+  if (!isFit(r)) return `<b>${n} is not a fit</b>: it passed every check but scored only <b>${q.score}</b> — it needs ${q.threshold}${found.length?`. All it found was that ${esc(andList(found))}`:", and no buying signals were found on its website"}.`;
+  const tail = r.email ? ` So the system emailed <b>${esc(r.poc.poc.name)}</b> (${esc(r.poc.poc.position)}).`
+    : r.poc && !r.poc.found ? ` But no contact could be found, so no email was written.` : "";
+  return `<b>${n} is a fit.</b> It passed all 4 checks and scored <b>${q.score}</b> (needs ${q.threshold}), because ${esc(andList(found))}.${tail}`;
+}
+
+// ---- results ----
+async function loadRuns(){
+  const server = await (await fetch("/api/runs")).json();
+  const files = new Set(server.map(r => r._file));
+  const all = [...server, ...localRuns().filter(r => !files.has(r._file))].sort((a,b) => b._file.localeCompare(a._file));
+  const seen = new Set();
+  RUNS = all.filter(r => !seen.has(r.domain) && seen.add(r.domain));
+  RUNS.sort((a,b) => (isFit(b) - isFit(a)) || (!!b.email - !!a.email) || ((b.qualification?.score||0)-(a.qualification?.score||0)));
+
+  const n = RUNS.length, f = RUNS.filter(isFit).length, c = RUNS.filter(r=>r.poc?.found).length,
+        d = RUNS.filter(r=>r.email).length, s = RUNS.filter(r=>r.status==="sent").length;
+  const of = (a,b,w) => b ? `${a} of ${b} ${w}` : "";
+  $("#funnel").innerHTML = [
+    [n,"companies checked",""],[f,"fit Sprinto",of(f,n,"checked")],[c,"have a named contact",of(c,f,"that fit")],
+    [d,"emails written",of(d,c,"with a contact")],[s,"emails sent",META.gmail_configured?of(s,d,"written"):"Gmail not connected yet"]
+  ].map(([v,l,r])=>`<div class="fn"><div class="v">${v}</div><div class="l">${l}</div><div class="r">${r}</div></div>`).join("");
+
+  $("#list").innerHTML = RUNS.length ? RUNS.map((r,i) => `
+    <tr class="row ${SELECTED===r._file?"sel":""}" data-i="${i}">
+      <td><div class="dn">${esc(name(r))} <span class="muted" style="font-weight:400;font-size:12px">${esc(r.domain)}</span></div><div class="ol">${esc(r.company?.one_liner||"")}</div></td>
+      <td>${fitPill(r)}</td>
+      <td class="hide-sm" style="width:190px">${scoreCell(r.qualification)}</td>
+      <td>${outcome(r)}</td>
+      <td class="hide-sm">${r.poc?.poc ? `<div style="font-weight:600">${esc(r.poc.poc.name)}</div><div class="ol">${esc(r.poc.poc.position||"")}</div>` : `<span class="muted">—</span>`}</td>
+    </tr>`).join("") : `<tr><td colspan="5" class="empty">Nothing yet. Paste a few domains above and run the 7 steps.</td></tr>`;
+  document.querySelectorAll("tr.row").forEach(el => el.onclick = () => { select(RUNS[el.dataset.i]); $("#walk").scrollIntoView(); });
+
+  $("#picker").innerHTML = RUNS.map((r,i)=>`<button data-i="${i}">${isFit(r)?"✓ ":""}${esc(name(r))}</button>`).join("");
+  document.querySelectorAll("#picker button").forEach(b => b.onclick = () => select(RUNS[b.dataset.i]));
+  select(RUNS.find(x=>x._file===SELECTED) || RUNS.find(r=>r.email) || RUNS[0]);
+}
+
+// ---- walkthrough ----
+function select(r){
+  if (!r){ $("#detail").innerHTML = `<div class="card empty">Run the pipeline to see a walkthrough.</div>`; return; }
+  SELECTED = r._file;
+  document.querySelectorAll("tr.row").forEach(el => el.classList.toggle("sel", RUNS[el.dataset.i]._file===SELECTED));
+  document.querySelectorAll("#picker button").forEach(b => b.classList.toggle("on", RUNS[b.dataset.i]._file===SELECTED));
+  // Where did this company stop? -1 = got all the way to a written email.
+  const stopIdx = r.email ? -1
+    : !r.pages_scraped?.some(Boolean) || r.status?.includes("unreachable") ? 0
+    : r.qualification && !isFit(r) ? 2
+    : r.poc && !r.poc.found ? 3
+    : reached(r);
+  const done = stopIdx === -1 ? reached(r) : stopIdx;
+
+  const steps = [s1, s2, s3, s4, s5, s6, s7].map((fn, i) => {
+    const pending = i === 6 && r.email && r.status !== "sent";
+    const state = i < done ? "" : i === stopIdx ? "stop" : pending ? "pend" : "off";
+    const body = state !== "off" ? fn(r) : {q: FLOW[i][0], a: `<span class="muted">Not run — stopped at step ${stopIdx+1}.</span>`};
+    return `<div class="step ${state}"><div class="num">${state==="stop"?"✕":i+1}</div><div class="card">
+      <div class="q"><h4>${body.q}</h4><span class="tool">${FLOW[i][2]}</span></div>
+      <div class="a">${body.a}</div>${body.more ? `<div class="more">${body.more}</div>` : ""}</div></div>`;
+  }).join("");
+
+  $("#detail").innerHTML = `
+    <div class="card verdict ${isFit(r)?"yes":"no"}">
+      <div class="icon">${isFit(r)?"✓":"✕"}</div>
+      <div><h3>${esc(name(r))}</h3><div class="dom">${esc(r.domain)} · ${esc(r.company?.one_liner||"")}</div>
+      <div class="sentence">${verdictSentence(r)}</div></div>
+    </div>
+    <div class="story">${steps}</div>`;
+  const sb = $("#sendBtn");
+  if (sb) sb.onclick = async () => {
+    sb.disabled = true; $("#sendMsg").textContent = "Sending…";
+    const res = await fetch("/api/send/" + encodeURIComponent(r._file), {method:"POST"});
+    const j = await res.json();
+    if (!res.ok){ $("#sendMsg").textContent = j.error; sb.disabled = false; return; }
+    if (localRuns().some(x => x._file === j._file)) keepLocal(j);
+    await loadRuns();
+  };
+}
+
+function s1(r){
+  const pages = r.pages_scraped || [];
+  if (!pages.length) return {q:"What did we read?", a:`Couldn't open the website.`};
+  return {q:"What did we read?", a:`${pages.length} page${pages.length>1?"s":""} from ${esc(r.domain)}`,
+    more:`<div class="ev">${pages.map(u=>`<code>${esc(u.replace(/^https?:\/\/(www\.)?/,""))}</code>`).join(" · ")}</div>`};
+}
+function s2(r){
+  const c = r.company || {}, cs = c.compliance_status || {};
+  const yn = v => v === true ? "Yes" : v === false ? "No" : "Unknown";
+  const facts = [
+    ["What they sell", c.one_liner], ["Who buys it", c.target_customers], ["Industry", c.industry],
+    ["Stage", c.estimated_stage], ["Employees", c.estimated_employees ?? "Unknown"],
+    ["Sells to enterprises", yn(c.sells_to_enterprise)], ["Handles sensitive data", yn(c.handles_sensitive_data)],
+    ["Certifications today", (cs.frameworks_claimed||[]).join(", ") || "None mentioned"],
+    ["Compliance tool spotted", cs.trust_vendor || "None"],
+  ];
+  const n = r.news;
+  const news = !n ? "" : `<p class="eyebrow" style="margin-top:16px">Google News · 5 searches for “${esc(n.name_searched)}” · ${n.headlines.length} headline${n.headlines.length===1?"":"s"} kept</p>
+    <div class="ev" style="margin-bottom:6px">${n.searches.map(s=>`${esc(s.topic)}: ${s.kept}`).join(" · ")} — only headlines that name the company are kept; the AI ignores ones about a different company with the same name.</div>
+    ${n.headlines.length ? n.headlines.map(h=>`<div class="item"><div class="h"><span style="font-weight:500"><a href="${esc(h.url)}" target="_blank" rel="noopener">${esc(h.title)}</a></span><span class="muted" style="font-weight:400;white-space:nowrap">${esc(h.date)}</span></div></div>`).join("")
+      : `<div class="ev">No news found — the decision relies on the website alone.</div>`}`;
+  return {q:"What did we learn about them?", a:`${esc(c.company_name || r.domain)} — ${esc(c.industry || "")}`,
+    more:`<div class="facts">${facts.map(([k,v])=>`<div class="fact"><div class="k">${k}</div><div class="v">${esc(v ?? "Unknown")}</div></div>`).join("")}</div>${news}`};
+}
+function s3(r){
+  const q = r.qualification || {};
+  const gates = Object.entries(GATES).map(([k,g]) => {
+    const v = (q.gates||{})[k] || {}, fail = v.value === false, unk = !fail && v.unknown;
+    return `<div class="item"><div class="h"><span>${g.q}</span><span class="ans ${fail?"n":unk?"u":"y"}">${fail?g.fail+" ✕":unk?g.unk:g.pass+" ✓"}</span></div><div class="ev">${esc(v.evidence||"")}</div></div>`;
+  }).join("");
+  const sigs = Object.entries(META.signals).map(([k,m]) => {
+    const p = (q.points_breakdown||{})[k] || 0, ev = ((q.signals||{})[k]||{}).evidence;
+    return `<div class="item"><div class="h"><span><span class="sw" style="background:${p?m.color:"var(--line)"}"></span>${SIGNALS[k].q}</span>
+      <span class="ans ${p?"y":""}" style="${p?"":"color:var(--muted)"}">${p?`Yes · +${p}`:"Not found · 0"}</span></div>
+      <div class="ev">${esc(p ? ev : SIGNALS[k].why)}</div></div>`;
+  }).join("");
+  const fetches = (q.agent_trace||[]).filter(t=>t.action==="fetch");
+  const forced = (q.agent_trace||[]).some(t=>t.forced);
+  const loop = fetches.length
+    ? `<p class="eyebrow" style="margin-top:16px">It went looking for more (${fetches.length} of ${META.max_iterations} extra reads${forced?", then had to decide":""})</p>` +
+      fetches.map(t=>`<div class="item"><div class="h"><span>Read <code>${esc(t.url.replace(/^https?:\/\/(www\.)?/,""))}</code></span></div><div class="ev">Because: ${esc(t.missing_info)}</div></div>`).join("")
+    : `<p class="ev" style="margin-top:12px">It had enough information on the first pass, so it didn't read any extra pages.</p>`;
+
+  const failed = q.failed_gates?.length;
+  const a = failed ? `No. It failed ${failed===1?"a check":failed+" checks"}: ${esc(q.failed_gates.map(g=>GATES[g].short).join(", "))}.`
+    : isFit(r) ? `Yes. Passed all 4 checks and scored ${q.score} (needs ${q.threshold}).`
+    : `No. Passed the checks but scored ${q.score} (needs ${q.threshold}).`;
+  return {q:"Do they fit Sprinto's ideal customer?", a,
+    more:`<div class="g2">
+      <div><p class="eyebrow">Part A · Checks</p>${gates}</div>
+      <div><p class="eyebrow">Part B · Score: ${q.score} of ${MAX}</p>${stackBar(q)}<div class="scale"><span>0</span><span>needs ${q.threshold}</span><span>${MAX}</span></div>
+        <div style="margin-top:8px">${sigs}</div></div></div>${loop}`};
+}
+function s4(r){
+  if (!r.poc?.found) return {q:"Who should get the email?", a:`No one. ${esc(r.poc?.reason || "Hunter.io found no named people at this company.")}`};
+  const p = r.poc.poc, ini = (p.name||"?").split(" ").map(w=>w[0]).slice(0,2).join("");
+  return {q:"Who should get the email?", a:`${esc(p.name)}, ${esc(p.position||"")}`,
+    more:`<div class="g2"><div>
+      <div class="person"><div class="avatar">${esc(ini)}</div><div><div style="font-weight:700">${esc(p.name)}</div><div class="muted">${esc(p.position||"")}</div><div class="ev">${esc(p.email)}</div></div></div>
+      <div class="callout" style="margin-top:12px"><b>Why this person:</b> ${esc(r.poc.reasoning)}</div>
+      <div class="ev" style="margin-top:10px">Who we look for, in order: security or compliance lead → CTO / VP Engineering → CEO or founder → COO or sales head.</div></div>
+      <div><p class="eyebrow">Everyone Hunter.io found (${r.poc.candidates.length})</p>
+        <table class="cand">${r.poc.candidates.map(x=>`<tr class="${x.email===p.email?"pick":""}"><td>${x.email===p.email?"→ ":""}${esc(x.name)}</td><td>${esc(x.position||"—")}</td></tr>`).join("")}</table></div></div>`};
+}
+function s5(r){
+  const pains = r.pain_points?.pain_points || [];
+  const first = esc(r.poc?.poc?.name?.split(" ")[0] || "this person");
+  return {q:`What problems does ${first} probably have?`, a: pains.map((p,i)=>`${i+1}. ${esc(p.pain)}`).join("<br>"),
+    more:`<div class="g2">${pains.map((p,i)=>`<div class="pain"><div class="t">${i+1}. ${esc(p.pain)}</div>
+      <dl><dt>What we saw</dt><dd>${esc(p.evidence)}</dd><dt>Why ${first} feels it</dt><dd>${esc(p.why_this_role)}</dd><dt>How Sprinto helps</dt><dd>${esc(p.sprinto_angle)}</dd></dl></div>`).join("")}</div>`};
+}
+function s6(r){
+  const e = r.email, p = r.poc.poc;
+  return {q:"What do we say?", a:`Subject: “${esc(e.subject)}”`,
+    more:`<div class="g2" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)">
+      <div class="mail"><div class="meta"><span>To</span><span>${esc(META.to_email)} <span class="muted">(my inbox, for review)</span></span><span>Meant for</span><span>${esc(p.name)} &lt;${esc(p.email)}&gt;</span></div>
+        <div class="subj">${esc(e.subject)}</div><div class="body">${esc(e.body)}</div></div>
+      <div><p class="eyebrow">Why it's written this way</p>
+        <div class="item"><div class="h">It opens with something specific to them</div><div class="ev">${esc(e.hook)}</div><div class="ev"><i>Found on: ${esc(e.hook_source)}</i></div></div>
+        <div class="item"><div class="h">It leads with one problem</div><div class="ev">${esc(e.pain_point_used)}</div></div>
+        <div class="item"><div class="h">It follows fixed rules</div><div class="ev">First name · under 120 words · one hook, one problem, one outcome · one easy ask · no links or attachments.</div></div></div></div>`};
+}
+function s7(r){
+  if (r.status === "sent") return {q:"Was it sent?", a:`Yes — delivered to ${esc(r.send?.to)}.`};
+  return {q:"Was it sent?", a:`Not yet. It was a draft-only run.`,
+    more:`<button id="sendBtn" style="width:auto" ${META.gmail_configured?"":"disabled"}>Send to my inbox now</button>
+      <span id="sendMsg" class="ev" style="margin-left:10px">${META.gmail_configured?"":"Connect Gmail in .env to enable sending."}</span>`};
+}
+
+// ---- run ----
+$("#runBtn").onclick = async () => {
+  const domains = $("#domains").value.split(/\s+/).filter(Boolean);
+  if (!domains.length) return;
+  $("#runBtn").disabled = true; $("#runBtn").textContent = "Running…";
+  const state = Object.fromEntries(domains.map(d => [d, {s:"queued"}]));
+  const draw = () => $("#progress").innerHTML = Object.entries(state).map(([d,{s,rec}]) => {
+    const busy = s === "running", ok = rec && (rec.email || rec.status === "sent");
+    const n = rec ? reached(rec) : 0;
+    const stop = rec && !ok ? (rec.status?.includes("contact") ? 3 : rec.status?.includes("unreachable") ? 0 : 2) : -1;
+    const label = busy ? "Running all 7 steps — takes about a minute…" : rec ? rec.status : "queued";
+    return `<div class="row"><div class="d">${esc(d)}</div><div class="s">${esc(label)}</div>
+      <div class="mini ${busy?"busy":""}">${Array.from({length:7},(_,i)=>`<i class="${stop>=0 ? (i<stop?"on":(i===stop?"stop":"")) : (i<n?"on":"")}"></i>`).join("")}</div></div>`;
+  }).join("");
+  for (const d of domains){
+    state[d].s = "running"; draw();
+    try {
+      const res = await fetch("/api/run-one", {method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({domain: d, auto_send: $("#autoSend").checked})});
+      const rec = await res.json();
+      if (!res.ok || rec.error) throw new Error(rec.error || res.statusText);
+      keepLocal(rec);
+      Object.assign(state[d], {s:"done", rec});
+      SELECTED = rec._file;
+      await loadRuns();
+    } catch (e) {
+      Object.assign(state[d], {s:"done", rec:{status:"error: " + e.message}});
+    }
+    draw();
+  }
+  $("#runBtn").disabled = false; $("#runBtn").textContent = "Run the 7 steps";
+};
+
+loadMeta().then(loadRuns);
+</script>
+</body>
+</html>

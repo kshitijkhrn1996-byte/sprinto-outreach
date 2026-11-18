@@ -1,0 +1,5 @@
+# one domain per line
+rocketlane.com
+spotdraft.com
+zluri.com
+zomato.com
