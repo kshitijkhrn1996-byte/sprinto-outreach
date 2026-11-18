@@ -3,3 +3,4 @@ __pycache__/
 runs/archive/
 BUILD_PROMPT.md
 domains.txt
+.env.local
